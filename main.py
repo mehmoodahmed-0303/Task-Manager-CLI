@@ -123,7 +123,7 @@ def create_task():
 		'title': title,
 		'description': description,
 		'owner': CURRENT_USER[0],
-		'creation date': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+		'created_date': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
 		'status': 'pending'
 		}
 		tasks.append(task)
@@ -133,6 +133,51 @@ def create_task():
 		print(f"Task '{title}'' creation successful.")
 	except Exception as e:
 		print(f"Unexpected error: {e}")
+
+
+# def list_tasks():
+# 	try:
+# 		with open(TASKS_FILE, 'r') as file:
+# 			tasks = json.load(file)
+
+# 		user_tasks = [task for task in tasks if task['owner'] == CURRENT_USER[0]]
+# 		if not user_tasks:
+# 			print("No tasks found.")
+# 			return
+
+# 		print("\nYour tasks:")
+# 		print(f"{'ID':<36} {'Title':<20} {'Status':<10} {'Created date'}")
+# 		for task in user_tasks:
+# 			print(f"{task['id']:<36} {task['title'][:19]:<20} {task['status']:<10} {task['created_date']}")
+# 	except Exception as e:
+# 		print(f"Unexpected error: {e}")
+
+def list_tasks():
+	try:
+		with open(TASKS_FILE, 'r') as file:
+			tasks = json.load(file)
+        
+        # Ensure tasks is a list
+		if not isinstance(tasks, list):
+			print("Error: tasks.json is corrupted. Resetting to empty list.")
+			tasks = []
+			with open(TASKS_FILE, 'w') as file:
+				json.dump(tasks, file, indent=4)
+        
+		user_tasks = [task for task in tasks if task.get('owner') == CURRENT_USER[0]]
+		if not user_tasks:
+			print("No tasks found.")
+			return
+        
+		print("\nYour Tasks:")
+		print(f"{'ID':<36} {'Title':<20} {'Status':<10} {'Created Date'}")
+		for task in user_tasks:
+			created_date = task.get('created_date', 'Unknown')
+			print(f"{task.get('id', 'N/A'):<36} {task.get('title', '')[:19]:<20} {task.get('status', 'N/A'):<10} {created_date}")
+	except json.JSONDecodeError:
+		print("Error: Invalid JSON format in tasks.json.")
+	except Exception as e:
+		print(f"Error: {e}")
 
 
 
@@ -154,19 +199,22 @@ def main():
 				print("Exiting...")
 				break
 			else:
-				print("Invalid choice. please choose 1-3")
+				print("Invalid choice. please choose 1-4")
 		else:
 			print(f"\nTask Manager - Logged in as {CURRENT_USER[0]}:")
 			print("1. Add task")
-			print("2. Log out")
-			print("3. Exit")
-			choice = input("Enter choice 1-3: ").strip()
+			print("2. List Tasks")
+			print("3. Log out")
+			print("4. Exit")
+			choice = input("Enter choice 1-4: ").strip()
 			if choice == '1':
 				create_task()
 			elif choice == '2':
-				CURRENT_USER[0] = None
-				print("Logging out..")
+				list_tasks()
 			elif choice == '3':
+				print("Logging out..")
+				CURRENT_USER[0] = None
+			elif choice == '4':
 				print("Exiting..")
 				break
 			else:
