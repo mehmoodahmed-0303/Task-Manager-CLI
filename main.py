@@ -3,6 +3,7 @@ import os
 import bcrypt
 import re
 from datetime import datetime
+import uuid
 
 USERS_FILE = 'users.json'
 TASKS_FILE = 'tasks.json'
@@ -103,26 +104,73 @@ def login_user():
 		print(f"Unexpected error: {e}")
 
 
+def create_task():
+	try:
+		title = input("Enter Task title (or cancel to exit): ").strip()
+		if title.lower() == 'cancel':
+			print("Task creation canceled.")
+			return
+		if not title:
+			print("Title can not be empty. exiting")
+			return
+		description = input("Enter task description (optional, press enter to skip)")
+
+		with open(TASKS_FILE, 'r') as file:
+			tasks = json.load(file)
+
+		task = {
+		'id': str(uuid.uuid4()),
+		'title': title,
+		'description': description,
+		'owner': CURRENT_USER[0],
+		'creation date': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+		'status': 'pending'
+		}
+		tasks.append(task)
+
+		with open(TASKS_FILE, 'w') as file:
+			json.dump(tasks, file, indent=4)
+		print(f"Task '{title}'' creation successful.")
+	except Exception as e:
+		print(f"Unexpected error: {e}")
 
 
 
 def main():
 	initialize_files()
 	while True:
-		print("\nTask Manager Menu")
-		print(f"Current user: {CURRENT_USER[0] or 'Not logged in'}")
-		print("1. Register")
-		print("2. Login")
-		print("3. Exit")
-		choice = input("Enter choice (1-3): ").strip()
-		if choice == '1':
-			register_user()
-		elif choice == '2':
-			login_user()
-		elif choice == '3':
-			print("Exiting...")
-			break
+		if not CURRENT_USER[0]:
+			print("\nTask Manager Menu")
+			# print(f"Current user: {CURRENT_USER[0] or 'Not logged in'}")
+			print("1. Register")
+			print("2. Login")
+			print("3. Exit")
+			choice = input("Enter choice (1-3): ").strip()
+			if choice == '1':
+				register_user()
+			elif choice == '2':
+				login_user()
+			elif choice == '3':
+				print("Exiting...")
+				break
+			else:
+				print("Invalid choice. please choose 1-3")
 		else:
-			print("Invalid choice. please choose 1-3")
+			print(f"\nTask Manager - Logged in as {CURRENT_USER[0]}:")
+			print("1. Add task")
+			print("2. Log out")
+			print("3. Exit")
+			choice = input("Enter choice 1-3: ").strip()
+			if choice == '1':
+				create_task()
+			elif choice == '2':
+				CURRENT_USER[0] = None
+				print("Logging out..")
+			elif choice == '3':
+				print("Exiting..")
+				break
+			else:
+				print("Invalid choice. please enter 1-3")
+
 if __name__ == '__main__':
 	main()
