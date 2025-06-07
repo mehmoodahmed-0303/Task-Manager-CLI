@@ -6,6 +6,7 @@ from datetime import datetime
 
 USERS_FILE = 'users.json'
 TASKS_FILE = 'tasks.json'
+CURRENT_USER = [None]
 
 def initialize_files():
 	if not os.path.exists(USERS_FILE):
@@ -72,6 +73,34 @@ def register_user():
 
 
 
+def login_user():
+	try:
+		with open(USERS_FILE, 'r') as file:
+			users = json.load(file)
+
+		while True:
+			username = input("Enter user name(or cancel to exit): ").lower().strip()
+			if username == 'cancel':
+				print("Login canceled.")
+				return
+			if not username:
+				print("username can not be empty.")
+				continue
+			if username not in users:
+				print("User not found.")
+				continue
+			break
+		
+		password = input("Enter password: ").strip()
+		if bcrypt.checkpw(password.encode(), users[username]['password'].encode()):
+			CURRENT_USER[0] = username
+			print(f"Logged in as {username}.")
+			return True
+		else:
+			print(f"Incorrect password.")
+			return False
+	except Exception as e:
+		print(f"Unexpected error: {e}")
 
 
 
@@ -81,15 +110,19 @@ def main():
 	initialize_files()
 	while True:
 		print("\nTask Manager Menu")
+		print(f"Current user: {CURRENT_USER[0] or 'Not logged in'}")
 		print("1. Register")
-		print("2. Exit")
-		choice = input("Enter choice (1-2): ").strip()
+		print("2. Login")
+		print("3. Exit")
+		choice = input("Enter choice (1-3): ").strip()
 		if choice == '1':
 			register_user()
 		elif choice == '2':
+			login_user()
+		elif choice == '3':
 			print("Exiting...")
 			break
 		else:
-			print("Invalid choice. please choose 1-2")
+			print("Invalid choice. please choose 1-3")
 if __name__ == '__main__':
 	main()

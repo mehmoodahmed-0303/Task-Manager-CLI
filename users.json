@@ -1,8 +1,12 @@
 {
-    
     "ahmed": {
         "password": "$2b$12$OIsFffmgH/hy6HCy4MYkweCjjUAxRxIusXRwiTWcZqlLa.UOUm0Q2",
         "email": "",
         "registered_date": "2025-06-07 02:49:43"
+    },
+    "mehmood": {
+        "password": "$2b$12$BUzm4/zlt2ZR/U.xnAjo1uJaRwB2wnqCpFVBdD5OFPhCGVSKsCG52",
+        "email": "",
+        "registered_date": "2025-06-07 23:09:21"
     }
 }
