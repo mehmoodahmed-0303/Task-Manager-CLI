@@ -180,6 +180,60 @@ def list_tasks():
 		print(f"Error: {e}")
 
 
+def edit_task():
+	try:
+		with open(TASKS_FILE, 'r') as file:
+			tasks = json.load(file)
+
+		user_tasks = [task for task in tasks if task.get('owner') == CURRENT_USER[0]]
+		if not user_tasks:
+			print("No tasks found to edit.")
+			return
+		print("\nChose task to edit.")
+		print(f"{'index':<6} {'ID':<15} {'Title':<20} {'Status':<10} {'Created date'}")
+		for i, task in enumerate(user_tasks, 1):
+			print(f"{i:<6} {task.get('id', 'N/A')[:10]} {task.get('title', '')[:19]} {task.get('status', 'N/A')[:10]} {task.get('created_date', '')}")
+
+		while True:
+			index = input("Enter the index of task to edit. (or cancel to exit)").strip().lower()
+			if index == 'cancel':
+				print("Task editing canceled.")
+				return
+			try:
+				index = int(index) - 1
+				if 0 <= index <= len(task):
+					break
+			except ValueError:
+				print("Invalid index. Enter number of canel")
+
+		task = user_tasks[index]
+		task_index = tasks.index(task)
+
+		title = input(f"Enter new title. (current title {task.get('title', '')}), press enter to keep unchanged: ")
+		if title:
+			task['title'] = title
+
+		description = input(f"Enter new description. current '{task.get('description','')}, press enter to keep unchanged': ")
+		if description:
+			task['description'] = description
+
+		status = input(f"Enter new status. (pending/complete, current {task.get('status', '')}). press enter to keep unchanged: ")
+		if status:
+			task['status'] = status
+
+		tasks[task_index] = task
+		with open(TASKS_FILE, 'w') as file:
+			json.dump(tasks, file, indent=4)
+		print("Task updated successfuly.")
+
+	except Exception as e:
+		print(f"Unexpected error: 	{e}")
+
+
+
+
+
+
 
 def main():
 	initialize_files()
@@ -199,22 +253,25 @@ def main():
 				print("Exiting...")
 				break
 			else:
-				print("Invalid choice. please choose 1-4")
+				print("Invalid choice. please choose 1-5")
 		else:
 			print(f"\nTask Manager - Logged in as {CURRENT_USER[0]}:")
 			print("1. Add task")
 			print("2. List Tasks")
-			print("3. Log out")
-			print("4. Exit")
-			choice = input("Enter choice 1-4: ").strip()
+			print("3. Edit Task")
+			print("4. Log out")
+			print("5. Exit")
+			choice = input("Enter choice 1-5: ").strip()
 			if choice == '1':
 				create_task()
 			elif choice == '2':
 				list_tasks()
 			elif choice == '3':
+				edit_task()
+			elif choice == '4':
 				print("Logging out..")
 				CURRENT_USER[0] = None
-			elif choice == '4':
+			elif choice == '5':
 				print("Exiting..")
 				break
 			else:
