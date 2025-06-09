@@ -5,6 +5,14 @@
         "description": "I have to update PersonalfinanceTracker with GUI",
         "owner": "mehmood",
         "creation date": "2025-06-08 00:00:27",
+        "status": "done"
+    },
+    {
+        "id": "aefaedcd-3e7d-4944-a025-15804712e9b2",
+        "title": "push project to GitHub",
+        "description": "push the current chagnes to github project file",
+        "owner": "mehmood",
+        "created_date": "2025-06-09 14:33:18",
         "status": "pending"
     }
 ]
