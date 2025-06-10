@@ -14,5 +14,23 @@
         "owner": "mehmood",
         "created_date": "2025-06-10 14:18:11",
         "status": "pending"
+    },
+    {
+        "id": "eae0fca2-22e6-4e8c-bbbc-00fa2f686abd",
+        "title": "complete the project",
+        "description": "complete task manager project with GUI",
+        "owner": "mehmood",
+        "created_date": "2025-06-10 14:42:12",
+        "deadline": "",
+        "status": "pending"
+    },
+    {
+        "id": "63391ad7-73e0-4ad8-af19-558e04ea5eff",
+        "title": "complete the project",
+        "description": "complete task manager project with GUI",
+        "owner": "mehmood",
+        "created_date": "2025-06-10 14:44:24",
+        "deadline": "2025-06-15",
+        "status": "pending"
     }
 ]

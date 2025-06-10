@@ -114,6 +114,13 @@ def create_task():
 			print("Title can not be empty. exiting")
 			return
 		description = input("Enter task description (optional, press enter to skip)")
+		deadline = input("Enter task deadline(YY-MM-DD, optional, press enter to skip): ")
+		if deadline:
+			try:
+				datetime.strptime(deadline, '%Y-%m-%d')
+			except ValueError:
+				print("Invalid date format. Skipping deadline.")
+				deadline = ""
 
 		with open(TASKS_FILE, 'r') as file:
 			tasks = json.load(file)
@@ -124,6 +131,7 @@ def create_task():
 		'description': description,
 		'owner': CURRENT_USER[0],
 		'created_date': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+		'deadline': deadline,
 		'status': 'pending'
 		}
 		tasks.append(task)
@@ -134,23 +142,6 @@ def create_task():
 	except Exception as e:
 		print(f"Unexpected error: {e}")
 
-
-# def list_tasks():
-# 	try:
-# 		with open(TASKS_FILE, 'r') as file:
-# 			tasks = json.load(file)
-
-# 		user_tasks = [task for task in tasks if task['owner'] == CURRENT_USER[0]]
-# 		if not user_tasks:
-# 			print("No tasks found.")
-# 			return
-
-# 		print("\nYour tasks:")
-# 		print(f"{'ID':<36} {'Title':<20} {'Status':<10} {'Created date'}")
-# 		for task in user_tasks:
-# 			print(f"{task['id']:<36} {task['title'][:19]:<20} {task['status']:<10} {task['created_date']}")
-# 	except Exception as e:
-# 		print(f"Unexpected error: {e}")
 
 def list_tasks():
 	try:
@@ -170,10 +161,10 @@ def list_tasks():
 			return
         
 		print("\nYour Tasks:")
-		print(f"{'ID':<36} {'Title':<20} {'Status':<10} {'Created Date'}")
+		print(f"{'ID':<36} {'Title':<20} {'Status':<10} {'Deadline':<12} {'Created Date'}")
 		for task in user_tasks:
 			created_date = task.get('created_date', 'Unknown')
-			print(f"{task.get('id', 'N/A'):<36} {task.get('title', '')[:19]:<20} {task.get('status', 'N/A'):<10} {created_date}")
+			print(f"{task.get('id', 'N/A'):<36} {task.get('title', '')[:19]:<20} {task.get('status', 'N/A'):<10} {task.get('deadline',''):<12} {created_date}")
 	except json.JSONDecodeError:
 		print("Error: Invalid JSON format in tasks.json.")
 	except Exception as e:
@@ -216,6 +207,14 @@ def edit_task():
 		description = input(f"Enter new description. current '{task.get('description','')}, press enter to keep unchanged': ")
 		if description:
 			task['description'] = description
+
+		deadline = input(f"Enter new deadline (YYYY-MM-DD, current: {task.get('deadline', '')}, press Enter to keep): ").strip()
+		if deadline:
+			try:
+				datetime.strptime(deadline, '%Y-%m-%d')
+				task['deadline'] = deadline
+			except ValueError:
+				print("Invalid date format. Skipping deadline.")
 
 		status = input(f"Enter new status. (pending/complete, current {task.get('status', '')}). press enter to keep unchanged: ")
 		if status:
