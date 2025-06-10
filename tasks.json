@@ -1,18 +1,18 @@
 [
     {
-        "id": "ef3c9f73-cb47-44ff-88c0-02471b99a4be",
-        "title": "Do work on project",
-        "description": "I have to update PersonalfinanceTracker with GUI",
-        "owner": "mehmood",
-        "creation date": "2025-06-08 00:00:27",
-        "status": "done"
-    },
-    {
         "id": "aefaedcd-3e7d-4944-a025-15804712e9b2",
         "title": "push project to GitHub",
         "description": "push the current chagnes to github project file",
         "owner": "mehmood",
         "created_date": "2025-06-09 14:33:18",
+        "status": "pending"
+    },
+    {
+        "id": "1c4f8c54-adf6-4d0f-b946-c363b5a24605",
+        "title": "Learn to hack data on same network",
+        "description": "learn hacking tool like network penetration",
+        "owner": "mehmood",
+        "created_date": "2025-06-10 14:18:11",
         "status": "pending"
     }
 ]

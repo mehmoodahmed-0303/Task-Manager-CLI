@@ -233,7 +233,40 @@ def edit_task():
 
 
 
+def delete_task():
+	try:
+		with open(TASKS_FILE, 'r') as file:
+			tasks = json.load(file)
 
+		user_tasks = [task for task in tasks if task.get('owner') == CURRENT_USER[0]]
+		if not user_tasks:
+			print("No task found to delete.")
+			return
+		print("\nYour tasks")
+		print(f"{'index':<6} {'ID':<10} {'Title':<20} {'Status':<20} {'Date Created'}")
+		for i, task in enumerate(user_tasks, 1):
+			print(f"{i:<6} {task.get('id', 'N/A')[:10]:<10} {task.get('title', '')[:19]:<20} {task.get('status', 'N/A')[:20]} {task.get('created_date', '')}")
+
+		while True:
+			index = input("Enter task index to delete (or cancel to exit): ").strip().lower()
+			if index == 'cancel':
+				print("Canceled.")
+				return
+			try:
+				index = int(index) - 1
+				if 0 <= index <= len(user_tasks):
+					break
+			except ValueError:
+				print("Invalid index. Enter a number or cancel")
+
+		task = user_tasks[index]
+		tasks.remove(task)
+		with open(TASKS_FILE, 'w') as file:
+			json.dump(tasks, file, indent=4)
+		print("Task deleted successfully.")
+
+	except Exception as e:
+		print(f"Unexpected error: {e}")
 
 def main():
 	initialize_files()
@@ -253,15 +286,16 @@ def main():
 				print("Exiting...")
 				break
 			else:
-				print("Invalid choice. please choose 1-5")
+				print("Invalid choice. please choose 1-3")
 		else:
 			print(f"\nTask Manager - Logged in as {CURRENT_USER[0]}:")
 			print("1. Add task")
 			print("2. List Tasks")
 			print("3. Edit Task")
-			print("4. Log out")
-			print("5. Exit")
-			choice = input("Enter choice 1-5: ").strip()
+			print("4. delete task")
+			print("5. Log out")
+			print("6. Exit")
+			choice = input("Enter choice 1-6: ").strip()
 			if choice == '1':
 				create_task()
 			elif choice == '2':
@@ -269,13 +303,15 @@ def main():
 			elif choice == '3':
 				edit_task()
 			elif choice == '4':
+				delete_task()
+			elif choice == '5':
 				print("Logging out..")
 				CURRENT_USER[0] = None
-			elif choice == '5':
+			elif choice == '6':
 				print("Exiting..")
 				break
 			else:
-				print("Invalid choice. please enter 1-3")
+				print("Invalid choice. please enter 1-6")
 
 if __name__ == '__main__':
 	main()
