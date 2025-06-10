@@ -121,6 +121,9 @@ def create_task():
 			except ValueError:
 				print("Invalid date format. Skipping deadline.")
 				deadline = ""
+		priority = input("Enter priority. (low/medium/high, default:medium): ").strip().lower()
+		if priority not in ['low','medium','high']:
+			priority = 'medium'
 
 		with open(TASKS_FILE, 'r') as file:
 			tasks = json.load(file)
@@ -132,6 +135,7 @@ def create_task():
 		'owner': CURRENT_USER[0],
 		'created_date': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
 		'deadline': deadline,
+		'priority': priority,
 		'status': 'pending'
 		}
 		tasks.append(task)
@@ -161,10 +165,10 @@ def list_tasks():
 			return
         
 		print("\nYour Tasks:")
-		print(f"{'ID':<36} {'Title':<20} {'Status':<10} {'Deadline':<12} {'Created Date'}")
+		print(f"{'ID':<36} {'Title':<20} {'Status':<10} {'Deadline':<12} {'Priority':<10} {'Created Date'}")
 		for task in user_tasks:
 			created_date = task.get('created_date', 'Unknown')
-			print(f"{task.get('id', 'N/A'):<36} {task.get('title', '')[:19]:<20} {task.get('status', 'N/A'):<10} {task.get('deadline',''):<12} {created_date}")
+			print(f"{task.get('id', 'N/A'):<36} {task.get('title', '')[:19]:<20} {task.get('status', 'N/A'):<10} {task.get('deadline',''):<12} {task.get('priority', ''):<10} {created_date}")
 	except json.JSONDecodeError:
 		print("Error: Invalid JSON format in tasks.json.")
 	except Exception as e:
@@ -215,6 +219,9 @@ def edit_task():
 				task['deadline'] = deadline
 			except ValueError:
 				print("Invalid date format. Skipping deadline.")
+		priority = input(f"Enter priority.(low/medium/high, default medium, current priority: {task.get('priority', '')})")
+		if priority  in ['low', 'medium', 'high']:
+			task['priority'] = priority
 
 		status = input(f"Enter new status. (pending/complete, current {task.get('status', '')}). press enter to keep unchanged: ")
 		if status:
