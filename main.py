@@ -106,6 +106,9 @@ def login_user():
 
 def create_task():
 	try:
+		with open(USERS_FILE, 'r') as file:
+			users = json.load(file)
+
 		title = input("Enter Task title (or cancel to exit): ").strip()
 		if title.lower() == 'cancel':
 			print("Task creation canceled.")
@@ -124,6 +127,10 @@ def create_task():
 		priority = input("Enter priority. (low/medium/high, default:medium): ").strip().lower()
 		if priority not in ['low','medium','high']:
 			priority = 'medium'
+		assignee = input("Enter assignee user, optional, press enter to skip: ").strip().lower()
+		if assignee and assignee not in users:
+			print("User not found. Skipping assignee")
+			assignee = ""
 
 		with open(TASKS_FILE, 'r') as file:
 			tasks = json.load(file)
@@ -136,6 +143,7 @@ def create_task():
 		'created_date': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
 		'deadline': deadline,
 		'priority': priority,
+		'assignee': assignee,
 		'status': 'pending'
 		}
 		tasks.append(task)
@@ -165,10 +173,10 @@ def list_tasks():
 			return
         
 		print("\nYour Tasks:")
-		print(f"{'ID':<36} {'Title':<20} {'Status':<10} {'Deadline':<12} {'Priority':<10} {'Created Date'}")
+		print(f"{'ID':<36} {'Title':<20} {'Status':<10} {'Deadline':<12} {'Priority':<10} {'Assignee':<15} {'Created Date'}")
 		for task in user_tasks:
 			created_date = task.get('created_date', 'Unknown')
-			print(f"{task.get('id', 'N/A'):<36} {task.get('title', '')[:19]:<20} {task.get('status', 'N/A'):<10} {task.get('deadline',''):<12} {task.get('priority', ''):<10} {created_date}")
+			print(f"{task.get('id', 'N/A'):<36} {task.get('title', '')[:19]:<20} {task.get('status', 'N/A'):<10} {task.get('deadline',''):<12} {task.get('priority', ''):<10} {task.get('assignee',''):<15} {created_date}")
 	except json.JSONDecodeError:
 		print("Error: Invalid JSON format in tasks.json.")
 	except Exception as e:
@@ -179,6 +187,8 @@ def edit_task():
 	try:
 		with open(TASKS_FILE, 'r') as file:
 			tasks = json.load(file)
+		with open(USERS_FILE, 'r') as file:
+			users = json.load(file)
 
 		user_tasks = [task for task in tasks if task.get('owner') == CURRENT_USER[0]]
 		if not user_tasks:
@@ -212,7 +222,7 @@ def edit_task():
 		if description:
 			task['description'] = description
 
-		deadline = input(f"Enter new deadline (YYYY-MM-DD, current: {task.get('deadline', '')}, press Enter to keep): ").strip()
+		deadline = input(f"Enter new deadline (YYYY-MM-DD, current: {task.get('deadline', '')}, press Enter to keep unchanged): ").strip()
 		if deadline:
 			try:
 				datetime.strptime(deadline, '%Y-%m-%d')
@@ -222,6 +232,13 @@ def edit_task():
 		priority = input(f"Enter priority.(low/medium/high, default medium, current priority: {task.get('priority', '')})")
 		if priority  in ['low', 'medium', 'high']:
 			task['priority'] = priority
+
+		assignee = input(f"Enter new assignee (current: {task.get('assignee')}, press enter to keep unchanged)").strip().lower()
+		if assignee and assignee not in users:
+			print("User not found. Keeping current assignee")
+		elif assignee:
+			task['assignee'] = assignee 
+
 
 		status = input(f"Enter new status. (pending/complete, current {task.get('status', '')}). press enter to keep unchanged: ")
 		if status:
