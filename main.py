@@ -7,6 +7,7 @@ import uuid
 
 USERS_FILE = 'users.json'
 TASKS_FILE = 'tasks.json'
+SESSION_FILE = 'session.json'
 CURRENT_USER = [None]
 
 def initialize_files():
@@ -104,30 +105,34 @@ def login_user():
 		print(f"Unexpected error: {e}")
 
 
-def create_task():
+def create_task(title=None, description=None, deadline=None, priority=None, assignee=None):
 	try:
 		with open(USERS_FILE, 'r') as file:
 			users = json.load(file)
-
-		title = input("Enter Task title (or cancel to exit): ").strip()
-		if title.lower() == 'cancel':
-			print("Task creation canceled.")
-			return
+		if title is None:
+			title = input("Enter Task title (or cancel to exit): ").strip()
+			if title.lower() == 'cancel':
+				print("Task creation canceled.")
+				return
 		if not title:
 			print("Title can not be empty. exiting")
 			return
-		description = input("Enter task description (optional, press enter to skip)")
-		deadline = input("Enter task deadline(YY-MM-DD, optional, press enter to skip): ")
+		if description is None:
+			description = input("Enter task description (optional, press enter to skip)").strip()
+		if deadline is None:
+			deadline = input("Enter task deadline(YY-MM-DD, optional, press enter to skip): ")
 		if deadline:
 			try:
 				datetime.strptime(deadline, '%Y-%m-%d')
 			except ValueError:
 				print("Invalid date format. Skipping deadline.")
 				deadline = ""
-		priority = input("Enter priority. (low/medium/high, default:medium): ").strip().lower()
+		if priority is None:
+			priority = input("Enter priority. (low/medium/high, default:medium): ").strip().lower()
 		if priority not in ['low','medium','high']:
 			priority = 'medium'
-		assignee = input("Enter assignee user, optional, press enter to skip: ").strip().lower()
+		if assignee is None:
+			assignee = input("Enter assignee user, optional, press enter to skip: ").strip().lower()
 		if assignee and assignee not in users:
 			print("User not found. Skipping assignee")
 			assignee = ""
