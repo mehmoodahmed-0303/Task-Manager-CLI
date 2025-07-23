@@ -8,5 +8,10 @@
         "password": "$2b$12$aNYHkSqQGlJeB22BYm1nze6bCO9OBi3LeV6unL5W3EmTkwzZVze3q",
         "email": "",
         "registered_date": "2025-06-11 14:27:00"
+    },
+    "ali": {
+        "password": "$2b$12$xWnu6zmXXtcfg.o1bAorTePRPqI.R9n5IgGs2LaYZ39IC4BL9CQem",
+        "email": "",
+        "registered_date": "2025-06-21 14:07:47"
     }
 }

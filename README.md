@@ -1,110 +1,95 @@
-# TaskManagerCLI
+# 🗂️ CLI Task Manager
 
-A secure, user-friendly command-line task manager built with Python.\
-Supports user registration with password hashing, login authentication, and full CRUD operations on personal tasks — all stored in JSON files.
-
----
-
-## 📌 Features
-
-- 🔐 User registration with **password strength checks** and **bcrypt hashing**
-- 🔑 Secure login system
-- ✅ Create, view, edit, delete tasks
-- 📝 Each task supports:
-  - Title, description, deadline, priority, status
-  - Optional assignee from registered users
-- 📓 Tasks and users stored in JSON files (`tasks.json`, `users.json`)
-- 📂 Local persistence (no database required)
-- 🗓️ Timestamp tracking for registration and task creation
+A command-line based task management application written in Python. It supports user registration, login, and full task lifecycle management (create, read, update, delete) — all stored locally using JSON files.
 
 ---
 
-## 📁 Project Structure
+## 🚀 Features
 
-```
-TaskManagerCLI/
-│
-├── app.py             # Main application logic
-├── users.json         # Auto-generated user database
-├── tasks.json         # Auto-generated task records
-├── requirements.txt   # Required Python packages
-└── README.md          # This file
-```
+- ✅ User registration & login with secure password hashing (`bcrypt`)
+- ✅ Password strength and email format validation
+- ✅ Task creation with:
+  - Title
+  - Description
+  - Deadline
+  - Priority (low, medium, high)
+  - Optional assignee
+- ✅ Edit and delete tasks
+- ✅ User-specific task access and session handling
+- ✅ JSON-based file storage (no database needed)
 
 ---
 
-## ⚙️ Requirements
+## 🛠️ Built With
 
-Include the following in `requirements.txt`:
+- Python 3
+- `bcrypt` for password hashing
+- `json` for file storage
+- `uuid` for unique task IDs
+- `datetime` for timestamping
+- `re` for input validation (emails, passwords)
+
+---
+
+## 📂 Project Structure
 
 ```
-bcrypt
-```
-
-Install with:
-
-```bash
-pip install -r requirements.txt
+task_manager.py         # Main CLI logic and functions
+users.json              # Stores registered user accounts
+tasks.json              # Stores all created tasks
+session.json (optional) # Used for session tracking (if implemented)
 ```
 
 ---
 
-## 🚀 Setup Instructions
+## ▶️ How to Run
 
-1. **Clone the repository**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/<your-username>/cli-task-manager.git
+   cd cli-task-manager
+   ```
 
-```bash
-git clone https://github.com/your-username/TaskManagerCLI.git
-cd TaskManagerCLI
-```
+2. Install dependencies (only `bcrypt` is external):
+   ```bash
+   pip install bcrypt
+   ```
 
-2. **Create and activate virtual environment**
-
-```bash
-python -m venv venv
-
-# On Windows:
-venv\Scripts\activate
-
-# On Linux/Mac:
-source venv/bin/activate
-```
-
-3. **Install dependencies**
-
-```bash
-pip install -r requirements.txt
-```
-
-4. **Run the app**
-
-```bash
-python app.py
-```
+3. Run the app:
+   ```bash
+   python task_manager.py
+   ```
 
 ---
 
-## 🧑‍💻 Usage
+## 📸 Screenshots
 
-- Run the app.
-- Register a new user.
-- Login with your credentials.
-- Manage tasks (Add, List, Edit, Delete).
-- Logout or exit anytime.
+| Register/Login | Task Menu | Task Listing |
+|----------------|-----------|---------------|
+| ![Login](assets/login.png) | ![Menu](assets/menu.png) | ![List](assets/list.png) |
+
+> *(Optional: You can add screenshots later in the `/assets` folder for better visuals)*
 
 ---
 
-## 🔒 Password Policy
+## 📌 Future Improvements
 
-- At least 8 characters
-- One uppercase letter
-- One lowercase letter
-- One digit
-- One special character (e.g., `!@#$%`)
+- Add task filtering/sorting by status, deadline, priority
+- Add color-coded terminal output
+- Implement session.json for persistent login
+- Convert to GUI (Tkinter or Flask-based)
 
-# Task Manager
+---
 
-A Python-based command-line application for managing tasks with user accounts and collaboration features.
+## 👤 Author
 
-## Status
-Under development.
+**Mehmood Ahmed**  
+📧 [mehmood3980350@gmail.com](mailto:mehmood3980350@gmail.com)  
+🔗 [LinkedIn](https://linkedin.com/in/mehmoodahmed-ds)  
+🔗 GitHub: [@your-username](https://github.com/your-username)
+
+---
+
+## 📝 License
+
+This project is open-source and free to use.
