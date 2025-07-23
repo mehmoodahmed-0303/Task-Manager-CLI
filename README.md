@@ -60,17 +60,12 @@ session.json (optional) # Used for session tracking (if implemented)
    python task_manager.py
    ```
 
----
-
-## 📸 Screenshots
-
-| Register/Login | Task Menu | Task Listing |
-|----------------|-----------|---------------|
-| ![Login](assets/login.png) | ![Menu](assets/menu.png) | ![List](assets/list.png) |
-
-> *(Optional: You can add screenshots later in the `/assets` folder for better visuals)*
-
----
+```
+├── main.py
+├── README.md
+├── tasks.json
+├── users.json
+```
 
 ## 📌 Future Improvements
 
